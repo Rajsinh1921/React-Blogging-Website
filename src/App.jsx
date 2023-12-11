@@ -8,7 +8,7 @@ import Footer from "./Components/Footer/Footer";
 import { Outlet } from "react-router-dom";
 function App() {
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     authService
@@ -16,12 +16,14 @@ function App() {
       .then((userData) => {
         if (userData) {
           dispatch(login({ userData }));
+        } else {
+          dispatch(logout());
         }
       })
       .finally(() => setLoading(false));
   }, []);
 
-  return (
+  return !loading ? (
     <center className="">
       <div className="min-h-screen flex flex-wrap contents-between bg-gray-500">
         <div className="w-full block">
@@ -31,7 +33,7 @@ function App() {
         </div>
       </div>
     </center>
-  );
+  ) : null;
 }
 
 export default App;

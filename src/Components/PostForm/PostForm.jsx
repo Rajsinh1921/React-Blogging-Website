@@ -10,19 +10,19 @@ function PostForm({ post }) {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
       },
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     if (post) {
       const file = data.image[0]
-        ? appwriteService.uploadFile(data.image[0])
+        ? await appwriteService.uploadFile(data.image[0])
         : null;
 
       if (file) {
@@ -36,19 +36,19 @@ function PostForm({ post }) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = (await data.image[0])
+      const file = (await appwriteService.uploadFile(data.image[0]))
         ? appwriteService.uploadFile(data.image[0])
         : null;
 
       if (file) {
         const fileId = file.$id;
         data.featiredImage = fileId;
-        await appwriteService.createPost({
+        const dbPost = await appwriteService.createPost({
           ...data,
           userId: userData.$id,
         });
         if (dbPost) {
-          navigate(`/post/${dbpost.$id}`);
+          navigate(`/post/${dbPost.$id}`);
         }
       }
     }
@@ -67,18 +67,13 @@ function PostForm({ post }) {
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue(
-          "slug",
-          slugTransform(value.title, {
-            shouldValidate: true,
-          })
-        );
+        setValue("slug", slugTransform(value.title), {
+          shouldValidate: true,
+        });
       }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
 
   return (

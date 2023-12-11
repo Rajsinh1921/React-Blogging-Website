@@ -12,7 +12,6 @@ import RTE from "./RTE.jsx";
 import Signup from "./Signup.jsx";
 import PostForm from "./PostForm/PostForm.jsx";
 import AuthLayout from "./AuthLayout.jsx";
-
 export {
   Header,
   Footer,

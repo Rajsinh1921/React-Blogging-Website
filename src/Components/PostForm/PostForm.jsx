@@ -36,9 +36,7 @@ function PostForm({ post }) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = (await appwriteService.uploadFile(data.image[0]))
-        ? appwriteService.uploadFile(data.image[0])
-        : null;
+      const file = await appwriteService.uploadFile(data.image[0]);
 
       if (file) {
         const fileId = file.$id;
@@ -59,7 +57,8 @@ function PostForm({ post }) {
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d]+/g, "-");
+        .replace(/[^a-zA-Z\d\s]+/g, "-")
+        .replace(/\s/g, "-");
 
     return "";
   }, []);

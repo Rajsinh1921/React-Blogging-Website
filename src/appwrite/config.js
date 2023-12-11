@@ -4,14 +4,14 @@ import { Client, Account, ID, Databases, Storage, Query } from "appwrite";
 export class Service {
   client = new Client();
   databases;
-  storage;
+  bucket;
 
   constructor() {
     this.client
       .setEndpoint(conf.appwriteUrl)
       .setProject(conf.appwriteProjectId);
     this.databases = new Databases(this.client);
-    this.storage = new Storage(this.client);
+    this.bucket = new Storage(this.client);
   }
 
   async createPost({ title, slug, content, featuredImage, status, userId }) {
@@ -55,19 +55,17 @@ export class Service {
 
   async deletePost(slug) {
     try {
-      await this.databases.deletePost(
+      await this.databases.deleteDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         slug
       );
       return true;
     } catch (error) {
-      console.log("Appwrite service :: deletePost :: error", error);
-      throw error;
+      console.log("Appwrite serive :: deletePost :: error", error);
       return false;
     }
   }
-
   async getPost(slug) {
     try {
       return await this.databases.getDocument(
@@ -78,7 +76,6 @@ export class Service {
     } catch (error) {
       console.log("Appwrite service :: getPost :: error", error);
       throw error;
-      return false;
     }
   }
 
@@ -103,11 +100,10 @@ export class Service {
         file
       );
     } catch (error) {
-      console.log("Appwrite service :: uploadFile :: error", error);
+      console.log("Appwrite serive :: uploadFile :: error", error);
       return false;
     }
   }
-
   async deleteFile(fileId) {
     try {
       await this.bucket.deleteFile(conf.appwriteBucketId, fileId);

@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import authService from "./appwrite/auth";
-import { login } from "./Store/authSlice";
+import { login, logout } from "./Store/authSlice";
 import LoadingSpinner from "./Components/LoadingSpinner/LoadingSpinner";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";

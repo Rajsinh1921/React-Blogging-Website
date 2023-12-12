@@ -74,12 +74,12 @@ export class Service {
         slug
       );
     } catch (error) {
-      console.log("Appwrite service :: getPost :: error", error);
-      throw error;
+      console.log("Appwrite serive :: getPost :: error", error);
+      return false;
     }
   }
 
-  async getPosts(queries = [Query.equal("Status", "active")]) {
+  async getPosts(queries = [Query.equal("status", "active")]) {
     try {
       return await this.databases.listDocuments(
         conf.appwriteDatabaseId,
@@ -87,11 +87,10 @@ export class Service {
         queries
       );
     } catch (error) {
-      console.log("Appwrite service :: getPosts :: error", error);
-      throw error;
+      console.log("Appwrite serive :: getPosts :: error", error);
+      return false;
     }
   }
-
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(

@@ -21,7 +21,9 @@ function Signup() {
         if (userData) dispatch(login(userData));
         navigate("/");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
